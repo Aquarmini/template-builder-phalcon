@@ -134,6 +134,7 @@ return new Config(
             'logDir' => ROOT_PATH . '/storage/log/',
             'metaDataDir' => ROOT_PATH . '/storage/meta/',
             'migrationsDir' => ROOT_PATH . '/storage/migrations/',
+            'builderDir' => ROOT_PATH . '/builder/',
             'baseUri' => '/',
         ],
 
@@ -264,6 +265,7 @@ return new Config(
                 'session' => App\Core\Services\Session::class,
                 'modelsManager' => App\Core\Services\ModelsManager::class,
                 'logger' => App\Core\Services\Logger::class,
+                'builder' => App\Core\Services\Builder::class,
             ],
             'cli' => [
                 'dispatcher' => App\Core\Services\Cli\Dispatcher::class,

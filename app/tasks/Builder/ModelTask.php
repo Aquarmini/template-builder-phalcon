@@ -25,6 +25,14 @@ class ModelTask extends Task
 
         $table = $this->argument('table');
         $template = $this->argument('template');
+        $output = $this->argument('output');
+        $hidden = [];
+        if ($this->hasOption('hidden')) {
+            $hidden = explode(',', $this->option('hidden'));
+        }
+        if ($this->hasOption('modelClass')) {
+            $modelClass = $this->option('modelClass');
+        }
 
         /** @var \Phalcon\Db\Adapter\Pdo\Mysql $db */
         $db = di('db');
@@ -33,12 +41,15 @@ class ModelTask extends Task
             return;
         }
 
-        $modelClass = Str::studly($table);
         $fields = [];
         $res = $db->describeColumns($table);
 
         foreach ($res as $v) {
+            if (in_array($v->getName(), $hidden)) {
+                continue;
+            }
             $item['name'] = $v->getName();
+            $item['camelName'] = Str::camel($v->getName());
             $item['type'] = $this->getType($v->getType());
             // $item['type'] = $v->getType();
             $fields[] = $item;
@@ -46,14 +57,18 @@ class ModelTask extends Task
 
         /** @var Builder $builder */
         $builder = new Builder();
+        if (empty($modelClass)) {
+            $modelClass = Str::studly($table);
+        }
         $data = [
             'modelClass' => $modelClass,
             'fields' => $fields,
             'datetime' => date('Y-m-d H:i:s'),
             'comment' => $this->getTableComments($table)??$modelClass,
+            'table' => $table,
         ];
 
-        $builder->build($template, $data)->save($modelClass . '.java');
+        $builder->build($template, $data)->save($output);
     }
 
     public function helpAction()
@@ -63,9 +78,12 @@ class ModelTask extends Task
         echo Color::head('Arguments:') . PHP_EOL;
         echo Color::colorize('  table=?       表名', Color::FG_LIGHT_GREEN) . PHP_EOL;
         echo Color::colorize('  template=?    模板名', Color::FG_LIGHT_GREEN) . PHP_EOL;
+        echo Color::colorize('  output=?      输出文件名', Color::FG_LIGHT_GREEN) . PHP_EOL;
         echo PHP_EOL;
         echo Color::head('Options:') . PHP_EOL;
         echo Color::colorize('  --help        帮助', Color::FG_LIGHT_GREEN) . PHP_EOL;
+        echo Color::colorize('  --hidden      隐藏的参数', Color::FG_LIGHT_GREEN) . PHP_EOL;
+        echo Color::colorize('  --modelClass  类名', Color::FG_LIGHT_GREEN) . PHP_EOL;
     }
 
     public function getType($type)

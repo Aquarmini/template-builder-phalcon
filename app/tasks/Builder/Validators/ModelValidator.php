@@ -17,7 +17,8 @@ class ModelValidator extends Validator
         $this->add(
             [
                 'table',
-                'template'
+                'template',
+                'output',
             ],
             new \Phalcon\Validation\Validator\PresenceOf([
                 'message' => 'The :field is required',

@@ -4,6 +4,7 @@ namespace App\Tasks\Builder;
 
 use App\Core\Template\Builder;
 use App\Tasks\Builder\Validators\ModelValidator;
+use App\Utils\DB;
 use limx\Support\Str;
 use Phalcon\Db\Column;
 use Xin\Cli\Color;
@@ -48,6 +49,8 @@ class ModelTask extends Task
         $data = [
             'modelClass' => $modelClass,
             'fields' => $fields,
+            'datetime' => date('Y-m-d H:i:s'),
+            'comment' => $this->getTableComments($table)??$modelClass,
         ];
 
         $builder->build($template, $data)->save($modelClass . '.java');
@@ -79,6 +82,27 @@ class ModelTask extends Task
             case Column::TYPE_TIMESTAMP:
                 return 'LocalDateTime';
         }
+    }
+
+    /**
+     * @desc   获取表注释
+     * @author limx
+     * @param $table
+     * @return null
+     */
+    public function getTableComments($table)
+    {
+        $config = di('config')->database;
+        $schema = $config->dbname;
+
+        $sql = "SELECT TABLE_COMMENT FROM information_schema.tables 
+          WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? LIMIT 1;";
+
+        $res = DB::fetch($sql, [$schema, $table]);
+        if (empty($res)) {
+            return null;
+        }
+        return $res['TABLE_COMMENT'];
     }
 
 }

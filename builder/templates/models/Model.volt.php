@@ -6,10 +6,12 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
-*
+* <?= $comment ?>
+
 * @Author limx
-* @Date 2017-09-28
-* @Time 20：19
+* @Desc 系统生成，不允许修改
+* @DateTime <?= $datetime ?>
+
 */
 @Data
 public class <?= $modelClass ?> extends BaseEntity {

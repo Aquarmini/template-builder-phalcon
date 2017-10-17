@@ -16,3 +16,4 @@ package-lock.json
 socket.pid
 builder/*.php
 builder/templates/demos/*.php
+builder/templates/aht

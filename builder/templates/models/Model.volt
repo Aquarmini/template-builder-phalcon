@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 public class {{ modelClass }} extends BaseEntity {
 
 {% for field in fields %}
+{% if field['comment'] %}
+    // {{ field['comment'] }}
+
+{% endif %}
     private {{ field['type'] }} {{ field['camelName'] }};
 
 {% endfor %}

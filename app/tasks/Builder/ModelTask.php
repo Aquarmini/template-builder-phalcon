@@ -14,6 +14,8 @@ class ModelTask extends Task
 {
     use Input;
 
+    public $columnComments;
+
     public function mainAction()
     {
         $validotar = new ModelValidator();
@@ -45,12 +47,14 @@ class ModelTask extends Task
         $res = $db->describeColumns($table);
 
         foreach ($res as $v) {
+
             if (in_array($v->getName(), $hidden)) {
                 continue;
             }
             $item['name'] = $v->getName();
             $item['camelName'] = Str::camel($v->getName());
             $item['type'] = $this->getType($v->getType());
+            $item['comment'] = $this->getColumnsComments($table, $v->getName());
             // $item['type'] = $v->getType();
             $fields[] = $item;
         }
@@ -64,7 +68,7 @@ class ModelTask extends Task
             'modelClass' => $modelClass,
             'fields' => $fields,
             'datetime' => date('Y-m-d H:i:s'),
-            'comment' => $this->getTableComments($table)??$modelClass,
+            'comment' => $this->getTableComments($table) ?? $modelClass,
             'table' => $table,
         ];
 
@@ -99,6 +103,8 @@ class ModelTask extends Task
             case Column::TYPE_DATETIME:
             case Column::TYPE_TIMESTAMP:
                 return 'LocalDateTime';
+            case Column::TYPE_DECIMAL:
+                return 'BigDecimal';
         }
     }
 
@@ -121,6 +127,26 @@ class ModelTask extends Task
             return null;
         }
         return $res['TABLE_COMMENT'];
+    }
+
+    public function getColumnsComments($table, $column)
+    {
+        if (isset($this->columnComments)) {
+            return $this->columnComments[$column];
+        }
+        $config = di('config')->database;
+        $schema = $config->dbname;
+
+        $sql = "SELECT COLUMN_NAME as `column`,column_comment as `comment` 
+            FROM INFORMATION_SCHEMA.Columns WHERE `table_schema`=? AND `table_name`=?;";
+
+        $res = DB::query($sql, [$schema, $table]);
+        $result = [];
+        foreach ($res as $item) {
+            $result[$item['column']] = $item['comment'];
+        }
+        $this->columnComments = $result;
+        return $result[$column];
     }
 
 }

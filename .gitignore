@@ -18,4 +18,5 @@ builder/*.php
 builder/templates/demos/*.php
 builder/templates/aht
 builder/templates/mnt
+builder/templates/poi
 *.cache

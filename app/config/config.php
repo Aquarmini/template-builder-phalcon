@@ -26,7 +26,17 @@ return new Config(
         | This value is version for this project.
         |
         */
-        'version' => '2.0.1',
+        'version' => '2.2.4',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Environment
+        |--------------------------------------------------------------------------
+        |
+        | This value is environment for this project.
+        |
+        */
+        'env' => env('APP_ENV', 'local'),
 
         /*
         |--------------------------------------------------------------------------
@@ -61,6 +71,7 @@ return new Config(
         'database' => [
             'adapter' => env('DB_ADAPTER', 'Mysql'),
             'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', 3306),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', null),
             'dbname' => env('DB_DBNAME', 'phalcon'),
@@ -124,7 +135,7 @@ return new Config(
             'coreDir' => APP_PATH . '/core/',
             'jobsDir' => APP_PATH . '/jobs/',
             'libraryDir' => APP_PATH . '/library/',
-            'logicsDir' => APP_PATH . '/logics/',
+            'middlewareDir' => APP_PATH . '/middleware/',
             'modelsDir' => APP_PATH . '/models/',
             'tasksDir' => APP_PATH . '/tasks/',
             'utilsDir' => APP_PATH . '/utils/',
@@ -277,6 +288,7 @@ return new Config(
                 'url' => App\Core\Services\Mvc\Url::class,
                 'view' => App\Core\Services\Mvc\View::class,
                 'dispatcher' => App\Core\Services\Mvc\Dispatcher::class,
+                'middleware' => App\Core\Services\Mvc\Middleware::class,
             ],
         ],
 

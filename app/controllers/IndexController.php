@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 namespace App\Controllers;
 
-use App\Logics\System;
+use App\Core\System;
 
 class IndexController extends Controller
 {
@@ -16,10 +16,17 @@ class IndexController extends Controller
      * @desc
      * @author limx
      * @return bool|\Phalcon\Mvc\View
+     * @Middleware('auth')
      */
     public function indexAction()
     {
-        $this->view->version = (new System())->version();
+        if ($this->request->isPost()) {
+            return $this->response->setJsonContent([
+                'version' => System::getInstance()->version(),
+                'message' => "You're now flying with Phalcon. Great things are about to happen!",
+            ]);
+        }
+        $this->view->version = System::getInstance()->version();
         return $this->view->render('index', 'index');
     }
 }

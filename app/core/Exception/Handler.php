@@ -24,7 +24,7 @@ class Handler
     private function __construct()
     {
         $this->di = FactoryDefault::getDefault();
-        $this->logger = di('logger')->getLogger('error', Sys::LOG_ADAPTER_FILE);;
+        $this->logger = di('logger')->getLogger('error', Sys::LOG_ADAPTER_FILE);
     }
 
     public static function getInstance()
@@ -42,7 +42,7 @@ class Handler
      */
     public function render(Exception $ex)
     {
-        $msg = $ex->getMessage() . " in " . $ex->getFile() . ' line ' . $ex->getLine() . PHP_EOL . $ex->getTraceAsString();
+        $msg = $ex->getMessage() . ' code:' . $ex->getCode() . ' in ' . $ex->getFile() . ' line ' . $ex->getLine() . PHP_EOL . $ex->getTraceAsString();
         $this->logger->error($msg);
         if (env('APP_DEBUG', false)) {
             echo $msg;
@@ -59,10 +59,9 @@ class Handler
      */
     public function renderForConsole(Exception $ex)
     {
-        $msg = $ex->getMessage() . " in " . $ex->getFile() . ' line ' . $ex->getLine() . PHP_EOL . $ex->getTraceAsString();
+        $msg = $ex->getMessage() . ' code:' . $ex->getCode() . ' in ' . $ex->getFile() . ' line ' . $ex->getLine() . PHP_EOL . $ex->getTraceAsString();
         $this->logger->error($msg);
         echo $msg;
         exit(255);
     }
-
 }

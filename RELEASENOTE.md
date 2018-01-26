@@ -5,12 +5,74 @@
 - [x] php单元测试
 
 ### Added
-* Swoole Socket增加用户组
-* Socket基类增加beforeServerStart方法
 
 ### Changed
+* 修改单元测试，增加命名空间Tests
+* 修改代码规范
+* 修改vendor/autoload的加载位置
+* 默认phalcon-dev脚本加载app/bootstrap.php
+* 修改中间件默认执行顺序
 
 ### Fixed
+* 修改Socket基类的配置，避免覆盖Injectable的config服务
+
+### Deleted
+* 删除多余注释
+* 删除updateOnly，使用useDynamicUpdate代替
+* 移除单元测试
+
+## [2.1.5]
+### Checked
+- [x] php单元测试
+
+### Added
+* 增加数据库端口配置
+
+### Changed
+* 修改mkdir为File::makeDirectory方法
+
+### Fixed
+* 修改InstanceBase getInstance不能返回一个实例的BUG
+* 修改当并发新建日志目录时，如果已存在目录，则不抛出错误
+
+### Deleted
+* 删除Logic目录
+* 删除不符合设计的代码
+
+## [2.0.7]
+### Checked
+- [x] php单元测试
+
+### Added
+* 增加路由group方法
+* 增加系统环境变量
+* 增加单例基类
+
+### Changed
+* 不使用系统方法 system删除缓存
+* 完善消息队列失败时逻辑处理
+* 修改异常捕获时，错误信息的格式
+* 修改缓存基类位置
+
+### Fixed
+
+## [2.0.5]
+### Checked
+- [x] php单元测试
+
+### Added
+* Swoole Socket增加用户组
+* Socket基类增加beforeServerStart方法
+* 增加中间件支持
+
+### Changed
+* 重写Debug工具类
+* 重构Mongo工具类
+* 重构Mongo服务注入
+* 修改limx\Support\Str工具类为Phalcon\Text工具类
+
+### Fixed
+* 修改中间件在php7.1下报错的BUG
 
 ## [2.0.0]
 ### Checked

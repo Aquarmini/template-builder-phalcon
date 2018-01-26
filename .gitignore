@@ -18,3 +18,4 @@ builder/*.php
 builder/templates/demos/*.php
 builder/templates/aht
 builder/templates/mnt
+*.cache
